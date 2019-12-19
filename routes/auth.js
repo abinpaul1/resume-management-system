@@ -20,7 +20,14 @@ const {
 //Constant
 const PER_PAGE = 40;
 
-router.post('/adminreg', async (req, res) => {
+function checkLogin(req, res, next) {
+  if (!req.session.userId){
+    return res.render('loginerror');
+  }
+  next();
+}
+
+router.post('/adminreg', checkLogin, async (req, res) => {
   console.log(req.body);
   const { error } = adminRegisterValidation(req.body);
   if (error) {
@@ -76,13 +83,6 @@ router.post('/adminlogin', async (req, res) => {
   req.session.userId = req.body.email;
   res.redirect('/api/candidate/list');
 });
-
-function checkLogin(req, res, next) {
-  if (!req.session.userId){
-    return res.render('loginerror');
-  }
-  next();
-}
 
 router.get('/adminlogout', checkLogin, function(req, res) {
   console.log(req.session)

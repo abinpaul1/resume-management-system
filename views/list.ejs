@@ -24,8 +24,9 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
     <script src="/scripts/list.js"></script>
+    <link rel="icon" href="/img/prime.ico">
 
-    <title>List</title>
+    <title>Candidate List</title>
 
 </head>
 
@@ -33,7 +34,10 @@
 
     <a id="top-button"></a>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Resume System</a>
+        <a class="navbar-brand">
+          <img src="/img/FINAL_LOGO_HIGH.png" width="200px" alt="">
+        </a>
+        <a class="navbar-brand"><strong>Candidate Portal</strong></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -52,8 +56,6 @@
     <!--CANDIDATE FILTER BOX-->
     <div class="list col-lg-12">
         <div class="row heading-row">
-            <h1>Filter Candidate Details</h1>
-
             <div class="col-lg-12">
                 <div class="col-lg-6 mx-auto">
                     <% if(error !=''){%>
@@ -169,7 +171,7 @@
     <!-- CANDIDATE LISTS -->
     <div class="list col-lg-12 mx-auto">
         <div class="row heading-row">
-            <h1>Candidate Details</h1>
+            <h5>Candidate Details</h5>
         </div>
         <input type="button" class="btn btn-outline-secondary" value="Get Emails" onclick="GetSelectedEmails()" />
         <div class="row row-list mx-auto">
