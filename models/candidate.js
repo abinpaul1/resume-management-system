@@ -65,6 +65,9 @@ const candidateSchema = new mongoose.Schema(
     },
     location: {
       type: String
+    },
+    client: {
+      type: String
     }
   },
   { versionKey: false }

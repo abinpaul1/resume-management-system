@@ -228,6 +228,34 @@ $(document).ready(function() {
     }
   });
 
+  // Client Autocomplete
+  $('#client').autocomplete({
+    source: function(req, res) {
+      $.ajax({
+        url: '/api/candidate/list/autocomplete/client',
+        dataType: 'jsonp',
+        type: 'GET',
+        data: req,
+        success: function(data) {
+          for (var i = 0; i<data.length; i=i+1){
+            data[i]['label'] = data[i]['label'].replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();});
+          }
+          res(data);
+        },
+        error: function(err) {
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength: 1,
+    select: function(event, ui) {
+      if (ui.items) {
+        $('#search-client').text(ui.item.label);
+      }
+    }
+  });
+
   // Skills Autocomplete
   $('.skills').autocomplete({
     source: function(req, res) {

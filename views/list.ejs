@@ -108,11 +108,12 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="email" class="col-lg-6 control-label">&nbsp;</label>
-
-                                <div class="companies-entry col-lg-6">
-                                    <input type="submit" class="form-control btn btn-primary" name="submit"
-                                        placeholder="Filter">
+                                <label for="sel1">Select status:</label>
+                                <div class="companies-entry col-md-8">
+                                    <select class="form-control" id="sel1" name="selectStatus">
+                                        <option value="0" <% if(select_status == 0){%>selected<%}%> >Not Verified</option>
+                                        <option value="1" <% if(select_status == 1){%>selected<%}%> >Verified</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -126,6 +127,17 @@
                                 <div class="companies-entry col-md-12">
                                     <input type="text" id="search-location" class="form-control"
                                         name="filterlocation" placeholder="Location">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="search-client" class="col-md-12 control-label">By
+                                    Client</label>
+                                <div class="companies-entry col-md-12">
+                                    <input type="text" id="search-client" class="form-control"
+                                        name="filterclient" placeholder="Client">
                                 </div>
                             </div>
                         </div>
@@ -152,12 +164,11 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="sel1">Select status:</label>
-                                <div class="companies-entry col-md-8">
-                                    <select class="form-control" id="sel1" name="selectStatus">
-                                        <option value="0" <% if(select_status == 0){%>selected<%}%> >Not Verified</option>
-                                        <option value="1" <% if(select_status == 1){%>selected<%}%> >Verified</option>
-                                    </select>
+                                <label for="email" class="col-lg-6 control-label">&nbsp;</label>
+
+                                <div class="companies-entry col-lg-6">
+                                    <input type="submit" class="form-control btn btn-primary" name="submit"
+                                        placeholder="Filter">
                                 </div>
                             </div>
                         </div>
@@ -196,6 +207,9 @@
                             <th>Locn.<a class="ml-5 sort-symbol" href="/api/candidate/sort/location"><i
                                         class="fa fa-sort"></i></a>
                             </th>
+                            <th>Client<a class="ml-5 sort-symbol" href="/api/candidate/sort/client"><i
+                                        class="fa fa-sort"></i></a>
+                            </th>
                             <th>Dob<a class="ml-5 sort-symbol" href="/api/candidate/sort/dob"><i
                                       class="fa fa-sort"></i></a></th>
                             <th>Rating<a class="ml-5 sort-symbol"
@@ -227,6 +241,7 @@
                             <td><%= row.experience %></td>
                             <td><%= row.qualification %></td>
                             <td style="word-break:normal;" width="6%"><% if(row.location){%><%= row.location.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
+                            <td style="word-break:normal;" width="6%"><% if(row.client){%><%= row.client.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
                             <td><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td>
                             <td><%= row.candidateRating %></td>
                             <td style="white-space: nowrap;"><% if(row.salary){%><%= row.salary.toLocaleString('en-IN') %><% } %></td>
@@ -289,6 +304,7 @@
                             <td><%= row.experience %></td>
                             <td><%= row.qualification %></td>
                             <td style="word-break:normal;" width="6%"><% if(row.location){%><%= row.location.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
+                            <td style="word-break:normal;" width="6%"><% if(row.client){%><%= row.client.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
                             <td style="white-space: nowrap;"><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td>
                             <td><%= row.candidateRating %></td>
                             <td style="white-space: nowrap;"><% if(row.salary){%><%= row.salary.toLocaleString('en-IN') %><% } %></td>

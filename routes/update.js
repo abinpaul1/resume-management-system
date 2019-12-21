@@ -4,6 +4,7 @@ const Position = require('../models/position');
 const Skills = require('../models/skills');
 const Qualification = require('../models/qualification');
 const Location = require('../models/location');
+const Client = require('../models/client');
 const { registerValidation } = require('../validation/validation');
 
 function checkLogin(req, res, next) {
@@ -79,6 +80,24 @@ router.post('/update', checkLogin, function (req, res) {
             qualification: candidate_qualification_new
           });
           new_qualification.save();
+        }
+      }
+    }
+
+    // Checking and inserting into client collection
+    let candidate_client_present = candidate.client;
+    let candidate_client_new = req.body.client;
+    if (candidate_client_new) {
+      candidate_client_new = candidate_client_new.toLowerCase();
+      if (candidate_client_present != candidate_client_new){
+        const clientExist = await Client.findOne({
+          client: candidate_client_new
+        });
+        if (!clientExist) {
+          const new_client = new Client({
+            client: candidate_client_new
+          });
+          new_client.save();
         }
       }
     }
@@ -169,6 +188,7 @@ router.post('/update', checkLogin, function (req, res) {
     candidate.status = req.body.status;
     candidate.dob = req.body.dob;
     candidate.location = candidate_location_new;
+    candidate.client = candidate_client_new;
 
     // save the candidate
     candidate.save(function(err) {

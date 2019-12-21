@@ -167,6 +167,31 @@ $(document).ready(function() {
     }
   });
 
+  //Client autocomplete
+  $('#client').autocomplete({
+    source: function(req, res) {
+      $.ajax({
+        url: '/api/candidate/list/autocomplete/client',
+        dataType: 'jsonp',
+        type: 'GET',
+        data: req,
+        success: function(data) {
+          res(data);
+        },
+        error: function(err) {
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength: 1,
+    select: function(event, ui) {
+      if (ui.items) {
+        $('#search-client').text(ui.item.label);
+      }
+    }
+  });
+
   //Qualification autocomplete
   $('#qualification').autocomplete({
     source: function(req, res) {

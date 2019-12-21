@@ -8,6 +8,7 @@ const Position = require('../models/position');
 const Skills = require('../models/skills');
 const Qualification = require('../models/qualification');
 const Location = require('../models/location')
+const Client = require('../models/client')
 const Admin = require('../models/admin');
 
 // Import Validation
@@ -223,6 +224,10 @@ router.post('/register', checkLogin, async (req, res) => {
   let { location } = req.body;
   if (location) location = location.toLowerCase();
 
+  //For Client
+  let { client } = req.body;
+  if (client) client = client.toLowerCase();
+
   //Setting default experience, salary to 0 if not specified
   let { salary } = req.body;
   let { experience } = req.body;
@@ -245,7 +250,8 @@ router.post('/register', checkLogin, async (req, res) => {
     interviewFeedback: req.body.interviewFeedback,
     resumeURL: req.body.resumeURL,
     dob: req.body.dob,
-    location: location
+    location: location,
+    client: client
   });
 
   await candidate
@@ -304,6 +310,20 @@ router.post('/register', checkLogin, async (req, res) => {
             location: candidate_location
           });
           new_location.save();
+        }
+      }
+
+      // Checking and inserting into client collection
+      const candidate_client = candidate['client'];
+      if (candidate_client) {
+        const clientExist = await Client.findOne({
+          client: candidate_client
+        });
+        if (!clientExist) {
+          const new_client = new Client({
+            client: candidate_client
+          });
+          new_client.save();
         }
       }
 
@@ -403,6 +423,8 @@ router.post('/search', checkLogin, function(req, res, next) {
   const filterName = req.body.filtername;
   const filterQualification = req.body.filterqualification;
   const filterLocation = req.body.filterlocation;
+  const filterClient = req.body.filterclient;
+
 
   // Taking skill as array
   let filterSkill = req.body.filterskill;
@@ -469,6 +491,9 @@ router.post('/search', checkLogin, function(req, res, next) {
   }
   if (req.body.filterlocation !== '') {
     filterParameter.location = filterLocation.toLowerCase()
+  }
+  if (req.body.filterclient !== '') {
+    filterParameter.client = filterClient.toLowerCase()
   }
   console.log(req.body);
   if (req.body.selectStatus == 1 || req.body.selectStatus == 0) {

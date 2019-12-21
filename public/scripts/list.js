@@ -173,6 +173,34 @@ $(document).ready(function() {
     }
   });
 
+  //Client autocomplete
+  $('#search-client').autocomplete({
+    source: function(req, res) {
+      $.ajax({
+        url: '/api/candidate/list/autocomplete/client',
+        dataType: 'jsonp',
+        type: 'GET',
+        data: req,
+        success: function(data) {
+          for (var i = 0; i<data.length; i=i+1){
+            data[i]['label'] = data[i]['label'].replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();});
+          }
+          res(data);
+        },
+        error: function(err) {
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength: 1,
+    select: function(event, ui) {
+      if (ui.items) {
+        $('#search-client').text(ui.item.label);
+      }
+    }
+  });
+
   //Back to top button
   var btn = $('#top-button');
 
@@ -272,7 +300,7 @@ function GetSelectedEmails() {
       for (var i = 1; i < checkBoxes.length; i++) {
           if (checkBoxes[i].checked) {
               var row = checkBoxes[i].parentNode.parentNode;
-              message += row.cells[14].innerHTML;
+              message += row.cells[15].innerHTML;
               message += " ";
           }
       }
