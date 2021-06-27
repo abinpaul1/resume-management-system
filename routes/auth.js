@@ -236,6 +236,8 @@ router.post('/register', checkLogin, async (req, res) => {
   if (experience=='')
     experience = 0;
 
+  let uploadedBy = req.session.userId;
+
   const candidate = new Candidate({
     name: req.body.name,
     email: req.body.email,
@@ -251,7 +253,8 @@ router.post('/register', checkLogin, async (req, res) => {
     resumeURL: req.body.resumeURL,
     dob: req.body.dob,
     location: location,
-    client: client
+    client: client,
+    uploadedBy: uploadedBy
   });
 
   await candidate
@@ -396,6 +399,11 @@ router.get('/list/:page', checkLogin, function(req, res, next) {
 // Delete API
 router.get('/delete/:id', checkLogin, async (req, res) => {
   const { id } = req.params;
+  // TODO : Check if uploadedBy matches or isAdmin and then let delete ; make async
+  // const isUserAdmin = Admin.find({"email" : req.session.userId}).isAdmin;
+  // const isUploadedBySameUser = Candidate.findById(id, 'uploadedBy') === req.session.userId;
+  // if (isUserAdmin || isUploadedBySameUser){ // Continue with deletion }
+
   const del = Candidate.findByIdAndDelete(id);
   console.log("Deleted by " + req.session.userId);
   del.exec(function (err, doc_del){

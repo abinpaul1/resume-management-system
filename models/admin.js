@@ -23,6 +23,10 @@ const adminSchema = new mongoose.Schema(
     date: {
       type: Date,
       default: Date.now
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false
     }
   },
   { versionKey: false }

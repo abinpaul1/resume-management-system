@@ -68,6 +68,11 @@ const candidateSchema = new mongoose.Schema(
     },
     client: {
       type: String
+    },
+    uploadedBy: {
+      type: String,
+      max: 255,
+      required: true
     }
   },
   { versionKey: false }
