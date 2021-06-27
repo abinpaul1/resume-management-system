@@ -29,7 +29,7 @@ function checkLogin(req, res, next) {
 }
 
 router.post('/adminreg', checkLogin, async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   const { error } = adminRegisterValidation(req.body);
   if (error) {
     return res.render('admin', { adError: error, adSuccess: '' });
@@ -64,7 +64,7 @@ router.post('/adminreg', checkLogin, async (req, res) => {
 });
 
 router.post('/adminlogin', async (req, res) => {
-  console.log(req.session);
+  //console.log(req.session);
   const { error } = adminLoginValidation(req.body);
   if (error) {
     return res.render('admin', { adError: error, adSuccess: '' });
@@ -86,7 +86,7 @@ router.post('/adminlogin', async (req, res) => {
 });
 
 router.get('/adminlogout', checkLogin, function(req, res) {
-  console.log(req.session)
+  //console.log(req.session)
   req.session.destroy(err =>{
     if (err){
       return res.send(err) //Check immmminent problem
@@ -123,7 +123,7 @@ router.get('/sort/:x', checkLogin, function(req, res, next) {
     // console.log('descending');
   }
   //Updating session cookie
-  console.log(sortParameter);
+  //console.log(sortParameter);
   req.session.ascFlag = ascFlag;
   req.session.descFlag = descFlag;
   req.session.sortParameter = JSON.stringify(sortParameter)
@@ -347,7 +347,7 @@ router.get('/list', checkLogin, (req, res) => {
   req.session.filterParameter = JSON.stringify(filterParameter)
   req.session.sortParameter = JSON.stringify(sortParameter)
 
-  console.log(filterParameter)
+  //console.log(filterParameter)
   Candidate.find(filterParameter)
     .skip(perPage * page - perPage)
     .limit(perPage)
@@ -374,7 +374,7 @@ router.get('/list/:page', checkLogin, function(req, res, next) {
   const perPage = PER_PAGE;
   const page = req.params.page || 1;
 
-  console.log(filterParameter)
+  //console.log(filterParameter)
   Candidate.find(filterParameter)
     .skip(perPage * page - perPage)
     .limit(perPage)
@@ -397,8 +397,10 @@ router.get('/list/:page', checkLogin, function(req, res, next) {
 router.get('/delete/:id', checkLogin, async (req, res) => {
   const { id } = req.params;
   const del = Candidate.findByIdAndDelete(id);
-  del.exec(err => {
+  console.log("Deleted by " + req.session.userId);
+  del.exec(function (err, doc_del){
     if (err) throw err;
+    console.log(doc_del);
     res.redirect('back');
   });
 });
@@ -428,7 +430,7 @@ router.post('/search', checkLogin, function(req, res, next) {
 
   // Taking skill as array
   let filterSkill = req.body.filterskill;
-  console.log(typeof filterSkill);
+  //console.log(typeof filterSkill);
   if (typeof filterSkill === 'object') {
     filterSkill = filterSkill
       .map(item => {
@@ -495,7 +497,7 @@ router.post('/search', checkLogin, function(req, res, next) {
   if (req.body.filterclient !== '') {
     filterParameter.client = filterClient.toLowerCase()
   }
-  console.log(req.body);
+  //console.log(req.body);
   if (req.body.selectStatus == 1 || req.body.selectStatus == 0) {
     filterParameter.status = req.body.selectStatus;
     set_status = req.body.selectStatus;
@@ -506,7 +508,7 @@ router.post('/search', checkLogin, function(req, res, next) {
   req.session.sortParameter = JSON.stringify(sortParameter)
   req.session.set_status = set_status
 
-  console.log(filterParameter)
+  //console.log(filterParameter)
   const perPage = PER_PAGE;
   const page = req.params.page || 1;
   const candidateFilter = Candidate.find(filterParameter)
@@ -518,7 +520,7 @@ router.post('/search', checkLogin, function(req, res, next) {
       if (data.length != 0) {
         res.redirect('../candidate/list/1');
       } else {
-        console.log('Data is empty');
+        //console.log('Data is empty');
         res.render('list', {
           records: [],
           select_status: set_status,

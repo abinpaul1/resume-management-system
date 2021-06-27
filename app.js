@@ -25,7 +25,7 @@ app.use(
     cookie: {
       maxAge: SESSION_LIFETIME,
       sameSite: true,
-      secure: IN_PROD,
+      secure: false,
       filterParameter: JSON.stringify({}),
       sortParameter: JSON.stringify({'date':-1}),
       set_status: 0,
