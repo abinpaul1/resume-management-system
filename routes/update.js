@@ -9,7 +9,7 @@ const { registerValidation } = require('../validation/validation');
 
 function checkLogin(req, res, next) {
   if (!req.session.userId){
-    return res.render('loginerror');
+    return res.redirect('/');
   }
   next();
 }

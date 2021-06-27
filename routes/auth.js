@@ -23,7 +23,7 @@ const PER_PAGE = 40;
 
 function checkLogin(req, res, next) {
   if (!req.session.userId){
-    return res.render('loginerror');
+    return res.redirect('/');
   }
   next();
 }
