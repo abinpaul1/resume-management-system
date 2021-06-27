@@ -210,8 +210,8 @@
                             <th>Client<a class="ml-5 sort-symbol" href="/api/candidate/sort/client"><i
                                         class="fa fa-sort"></i></a>
                             </th>
-                            <th>Dob<a class="ml-5 sort-symbol" href="/api/candidate/sort/dob"><i
-                                      class="fa fa-sort"></i></a></th>
+                            <!-- <th>Dob<a class="ml-5 sort-symbol" href="/api/candidate/sort/dob"><i
+                                      class="fa fa-sort"></i></a></th> -->
                             <th>Rating<a class="ml-5 sort-symbol"
                                     href="/api/candidate/sort/candidateRating"><i class="fa fa-sort"></i></a></th>
                             <th>Salary<a class="ml-5 sort-symbol" href="/api/candidate/sort/salary"><i
@@ -242,7 +242,7 @@
                             <td><%= row.qualification %></td>
                             <td style="word-break:normal;" width="6%"><% if(row.location){%><%= row.location.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
                             <td style="word-break:normal;" width="6%"><% if(row.client){%><%= row.client.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <td><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td>
+                            <!-- <td><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td> -->
                             <td><%= row.candidateRating %></td>
                             <td style="white-space: nowrap;"><% if(row.salary){%><%= row.salary.toLocaleString('en-IN') %><% } %></td>
                             <td><%= row.phone %></td>
@@ -305,7 +305,7 @@
                             <td><%= row.qualification %></td>
                             <td style="word-break:normal;" width="6%"><% if(row.location){%><%= row.location.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
                             <td style="word-break:normal;" width="6%"><% if(row.client){%><%= row.client.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <td style="white-space: nowrap;"><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td>
+                            <!-- <td style="white-space: nowrap;"><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td> -->
                             <td><%= row.candidateRating %></td>
                             <td style="white-space: nowrap;"><% if(row.salary){%><%= row.salary.toLocaleString('en-IN') %><% } %></td>
                             <td style="white-space: nowrap;"><%= row.phone %></td>
