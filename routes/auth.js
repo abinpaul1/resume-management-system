@@ -82,6 +82,7 @@ router.post('/adminlogin', async (req, res) => {
   }
 
   req.session.userId = req.body.email;
+  req.session.isAdmin = admin.isAdmin;
   res.redirect('/api/candidate/list');
 });
 
@@ -398,19 +399,36 @@ router.get('/list/:page', checkLogin, function(req, res, next) {
 
 // Delete API
 router.get('/delete/:id', checkLogin, async (req, res) => {
-  const { id } = req.params;
-  // TODO : Check if uploadedBy matches or isAdmin and then let delete ; make async
-  // const isUserAdmin = Admin.find({"email" : req.session.userId}).isAdmin;
-  // const isUploadedBySameUser = Candidate.findById(id, 'uploadedBy') === req.session.userId;
-  // if (isUserAdmin || isUploadedBySameUser){ // Continue with deletion }
+  console.log("Deletion requested by " + req.session.userId);
 
-  const del = Candidate.findByIdAndDelete(id);
-  console.log("Deleted by " + req.session.userId);
-  del.exec(function (err, doc_del){
-    if (err) throw err;
-    console.log(doc_del);
-    res.redirect('back');
-  });
+  const { id } = req.params;
+
+  if(req.session.isAdmin){
+    // Admin can delete anytime
+    Candidate.findByIdAndDelete(id).exec(function (err, doc_del){
+      if (err) throw err;
+      console.log(doc_del);
+      res.redirect('back');
+    });
+  }
+  else{
+    const del_candidate_query = Candidate.findById(id);
+    // Allow deletion if the same user uploaded and less than 1 hour has lapsed
+    del_candidate_query.exec(function (err, del_candidate){
+      const isUploadedByCurrentUser = del_candidate.uploadedBy === req.session.userId;
+      const hour_difference = Math.abs(new Date() - del_candidate.date) / 36e5;
+      if (isUploadedByCurrentUser && (hour_difference < 1)){
+        Candidate.findByIdAndDelete(id).exec(function (err, doc_del){
+          if (err) throw err;
+          console.log(doc_del);
+          res.redirect('back');
+        });
+      }
+      else{
+        res.redirect('back');
+      }
+    });
+  }
 });
 
 // Edit API
