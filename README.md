@@ -1,4 +1,4 @@
-#### PRIME RESUME SYSTEM
+#### RESUME SYSTEM
 
 ### Step 1 - Node Modules
 
@@ -15,6 +15,31 @@ Change the environment varible ```DB_CONNECT``` with your username, password and
     npm start
 
 It will start the Node back end server at http://localhost:3035, with Nodemon, so that updates happen automatically on save. 
+
+### Consolidated Steps
+```bash
+sudo apt-get update
+sudo apt-get install git nodejs npm
+
+# https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+# Start mongo
+
+git clone https://github.com/abinpaul1/resume-management-system
+
+cd resume-management-system
+
+# Setup  .env file similar to sample.env:
+
+npm install
+
+sudo npm install pm2 -g
+pm2 status
+pm2 startup   ## Copy the command given as output and run
+	
+pm2 start app.js
+
+```
+
 
 ### API end points
 
@@ -48,30 +73,16 @@ show tables
 
 
 
-## Docker Run
-
-### Setting mongo authentication in docker mongo
-
-Change the mongo container environment variables```MONGO_INITDB_ROOT_USERNAME```,```MONGO_INITDB_ROOT_PASSWORD``` to your mongodb username, password respectively in the docker-compose.yml file.
+## Docker Run For Development
 
 ```bash
-# Run in Docker
-docker-compose up
+# Run in Docker : mapped to localhost:85
+#
+docker-compose up --build
 # use -d flag to run in background
-```
 
-```bash
-# Tear down
-docker-compose down
-```
+# To execute inside container
+docker exec -t -i <container-id> /bin/sh
 
-```bash
-# To be able to edit files, add volume to compose file
-volumes: ['./:/usr/src/app']
+# Use python script to populate the database
 ```
-
-```bash
-# To re-build
-docker-compose build
-```
-

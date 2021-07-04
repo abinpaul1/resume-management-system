@@ -1,19 +1,28 @@
 version: '3'
 services:
-  app:
-    container_name: resume-system
+  node:
     restart: always
     build: .
     ports:
-      - '85:3035'
-    links:
+      - '85:3050'
+    environment:
+      - DB_CONNECT=mongodb://mongo:27017/resume-system
+      - PORT=3050
+      - NODE_ENV=production
+      - SESSION_NAME=sid
+      - SESSION_SECRET=thisisagoodsecrettokeepdocker
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    depends_on:
       - mongo
   mongo:
-    container_name: mongo
     image: mongo
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=""
-      - MONGO_INITDB_ROOT_PASSWORD=""
-
     ports:
       - '27017:27017'
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:
+  node_modules:
