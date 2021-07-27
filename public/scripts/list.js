@@ -300,7 +300,7 @@ function GetSelectedEmails() {
       for (var i = 1; i < checkBoxes.length; i++) {
           if (checkBoxes[i].checked) {
               var row = checkBoxes[i].parentNode.parentNode;
-              message += row.cells[15].innerHTML;
+              message += row.cells[14].innerHTML;
               message += " ";
           }
       }

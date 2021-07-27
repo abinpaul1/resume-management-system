@@ -1,5 +1,8 @@
 const express = require('express');
 const session = require('express-session');
+// TODO : Session store using mongodb (connect-mongo)
+// cookie-session cant be used because it stores value as base64 encoded string
+// isAdmin property is part of session object
 
 const app = express();
 

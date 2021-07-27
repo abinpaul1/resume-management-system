@@ -231,137 +231,109 @@
                     </thead>
                     <tbody style="font-size:14px;">
                         <%if (records.length >0){ %>
+                            <% const MILLISEC_PER_DAY =  1000 * 60 * 60 * 2 %>
+                            <% const ALLOWED_NUMBER_OF_DAYS = 2 %>
                         <% records.forEach(function(row){ %>
+                            <% var allowedDaysOver = Math.abs((new Date() - row.date) / MILLISEC_PER_DAY) > ALLOWED_NUMBER_OF_DAYS %>
+                            <% var permissionToSee =  isAdmin || !allowedDaysOver%>
                         <% if(row.status == 1){%>
-                        <tr style="background-color: #ccffcc">
-                            <td><input class="row-checkbox" type="checkbox"></td>
-                            <td style="white-space: nowrap;"><%= row.date.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %></td>
-                            <td style="word-break:normal;" width="6%"><%= row.name %></td>
-                            <td style="word-break:normal;" width="5%"><% if(row.position){%><%= row.position.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <td><%= row.experience %></td>
-                            <td><%= row.qualification %></td>
-                            <td style="word-break:normal;" width="6%"><% if(row.location){%><%= row.location.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <td style="word-break:normal;" width="6%"><% if(row.client){%><%= row.client.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <!-- <td><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td> -->
-                            <td><%= row.candidateRating %></td>
-                            <td style="white-space: nowrap;"><% if(row.salary){%><%= row.salary.toLocaleString('en-IN') %><% } %></td>
-                            <td><%= row.phone %></td>
-                            <td style="word-break:normal;" width="10%">
-                                <% for(comp of row.companiesWorked) {%>
-                                  *<%=comp%><br>
-                                <% } %>
-                            </td>
-                            <td width="10%"><% for(sk of row.skills) {%>
-                              *<%=sk%><br>
-                            <% } %></td>
-                            <td width="40%">
-                                <button type="button" class="btn" data-toggle="collapse"
-                                    data-target="#demo<%= row._id %>">Expand...</button>
-                                <div id="demo<%= row._id %>" class="collapse"><%= row.interviewFeedback %></div>
-                            </td>
-                            <td><%= row.email %></td>
-                            <td><a class="btn btn-success btn-sm" href="<%= row.resumeURL %>">
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></td>
-
-                            <td><a class="btn btn-primary btn-sm" href="/api/candidate/edit/<%= row._id %>"
-                                    target="_blank"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#confirmModal<%= row._id %>"><i class="fa fa-trash"></i></a>
-                                <!-- Confirm Delete Modal, id  is made with row_id -->
-                                <div class="modal fade" id="confirmModal<%= row._id %>" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel"><strong>Confirm
-                                                        Deletion</strong></h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Delete candidate entry from database.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</a>
-                                                <a type="button" class="btn btn-danger"
-                                                    href="/api/candidate/delete/<%= row._id %>">Confirm</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End Confirm Delete Modal -->
-                            </td>
-                        </tr>
+                            <tr style="background-color: #ccffcc">
                         <% } else {%>
-                        <tr>
-                            <td><input class="row-checkbox" type="checkbox"></td>
-                            <td style="white-space: nowrap;"><%= row.date.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %></td>
-                            <td style="word-break:normal;" width="6%"><%= row.name %></td>
-                            <td style="word-break:normal;" width="5%"><% if(row.position){%><%= row.position.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <td><%= row.experience %></td>
-                            <td><%= row.qualification %></td>
-                            <td style="word-break:normal;" width="6%"><% if(row.location){%><%= row.location.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <td style="word-break:normal;" width="6%"><% if(row.client){%><%= row.client.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
-                            <!-- <td style="white-space: nowrap;"><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td> -->
-                            <td><%= row.candidateRating %></td>
-                            <td style="white-space: nowrap;"><% if(row.salary){%><%= row.salary.toLocaleString('en-IN') %><% } %></td>
-                            <td style="white-space: nowrap;"><%= row.phone %></td>
-                            <td style="word-break:normal;" width="10%">
-                                <% for(comp of row.companiesWorked) {%>
-                                  *<%=comp%><br>
+                            <tr>
+                        <% } %>
+                                <td><input class="row-checkbox" type="checkbox"></td>
+                                <td style="white-space: nowrap;"><%= row.date.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %></td>
+                                
+                                <% if(permissionToSee){%>
+                                    <td style="word-break:normal;" width="6%"><%= row.name %></td>
+                                <% } else {%>
+                                    <!-- :P Styling to format like : Axxx K Pxxx -->
+                                    <% var display_name = "" %>
+                                    <% for(subname of row.name.split(" ")) {%>
+                                        <% display_name += subname[0] + "x".repeat(subname.slice(1).length) + " " %>
+                                    <% } %>
+                                    <td style="word-break:normal;" width="6%"><%= display_name %></td>
                                 <% } %>
-                            </td>
-                            <td width="10%">
-                                <% for(sk of row.skills) {%>
-                                  *<%=sk%><br>
-                                <% } %>
-                            </td>
-                            <td width="40%">
-                                <button type="button" class="btn" data-toggle="collapse"
-                                    data-target="#demo<%= row._id %>">Expand...</button>
-                                <div id="demo<%= row._id %>" class="collapse"><%= row.interviewFeedback %></div>
-                            </td>
-                            <td><%= row.email %></td>
-                            <td><a class="btn btn-success btn-sm" href="<%= row.resumeURL %>">
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></td>
 
-                            <td><a class="btn btn-primary btn-sm" href="/api/candidate/edit/<%= row._id %>"
-                                    target="_blank"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#confirmModal<%= row._id %>"><i class="fa fa-trash"></i></a>
-                                <!-- Confirm Delete Modal, id  is made with row_id -->
-                                <div class="modal fade" id="confirmModal<%= row._id %>" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel"><strong>Confirm
-                                                        Deletion</strong></h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Delete candidate entry from database.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</a>
-                                                <a type="button" class="btn btn-danger"
-                                                    href="/api/candidate/delete/<%= row._id %>">Confirm</a>
+                                <td style="word-break:normal;" width="5%"><% if(row.position){%><%= row.position.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
+                                <td><%= row.experience %></td>
+                                <td><%= row.qualification %></td>
+                                <td style="word-break:normal;" width="6%"><% if(row.location){%><%= row.location.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
+                                <td style="word-break:normal;" width="6%"><% if(row.client){%><%= row.client.replace(/\b\w+/g,function(s){return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();}); %><% } %></td>
+                                <!-- <td><% if(row.dob){%><%= row.dob.toLocaleString('en-IN',{year: 'numeric', month: 'numeric', day: 'numeric' }) %><% } %></td> -->
+                                <td><%= row.candidateRating %></td>
+                                <td style="white-space: nowrap;"><% if(row.salary){%><%= row.salary.toLocaleString('en-IN') %><% } %></td>
+                                
+                                <% if(permissionToSee){%>
+                                    <td><%= row.phone %></td>
+                                <% } else {%>
+                                    <td>+91-xxxxxxxxxx</td>
+                                <% } %>
+                                
+                                <td style="word-break:normal;" width="10%">
+                                    <% for(comp of row.companiesWorked) {%>
+                                    *<%=comp%><br>
+                                    <% } %>
+                                </td>
+                                <td width="10%"><% for(sk of row.skills) {%>
+                                *<%=sk%><br>
+                                <% } %></td>
+                                <td width="40%">
+                                    <button type="button" class="btn" data-toggle="collapse"
+                                        data-target="#demo<%= row._id %>">Expand...</button>
+                                    <div id="demo<%= row._id %>" class="collapse"><%= row.interviewFeedback %></div>
+                                </td>
+
+                                <% if(permissionToSee){%>
+                                    <td><%= row.email %></td>
+                                <% } else {%>
+                                    <td>xxxxxx@<%= row.email.split("@")[1]%></td>
+                                <% } %>
+
+                                <td>
+                                    <% if(permissionToSee){%>
+                                        <a class="btn btn-success btn-sm" href="<%= row.resumeURL %>">
+                                    <% } else {%>
+                                        <a class="btn btn-success btn-sm" href="#">
+                                    <% } %>
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="/api/candidate/edit/<%= row._id %>"
+                                        target="_blank"><i class="fa fa-edit"></i></a>
+
+                                    <a class="btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#confirmModal<%= row._id %>"><i class="fa fa-trash"></i></a>
+                                    <!-- Confirm Delete Modal, id  is made with row_id -->
+                                    <div class="modal fade" id="confirmModal<%= row._id %>" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel"><strong>Confirm
+                                                            Deletion</strong></h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Delete candidate entry from database.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</a>
+                                                    <a type="button" class="btn btn-danger"
+                                                        href="/api/candidate/delete/<%= row._id %>">Confirm</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- End Confirm Delete Modal -->
-                            </td>
-                        </tr>
-                        <% }%>
-
+                                    <!-- End Confirm Delete Modal -->
+                                </td>
+                            </tr>
                         <% })}else{ %>
                         <tr>
                             <td colspan="6">No Record Found</td>

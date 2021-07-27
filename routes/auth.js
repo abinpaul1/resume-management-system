@@ -11,6 +11,10 @@ const Location = require('../models/location')
 const Client = require('../models/client')
 const Admin = require('../models/admin');
 
+// Constants for controlling number of days
+const MILLISEC_PER_DAY = 1000 * 60 * 60 * 24;
+const ALLOWED_NUMBER_OF_DAYS = 2;
+
 // Import Validation
 const {
   registerValidation,
@@ -143,7 +147,8 @@ router.get('/sort/:x', checkLogin, function(req, res, next) {
           select_status: set_status,
           error: '',
           current: page,
-          pages: Math.ceil(count / perPage)
+          pages: Math.ceil(count / perPage),
+          isAdmin: req.session.isAdmin
         });
       });
     });
@@ -364,7 +369,8 @@ router.get('/list', checkLogin, (req, res) => {
           select_status: set_status,
           error: '',
           current: page,
-          pages: Math.ceil(count / perPage)
+          pages: Math.ceil(count / perPage),
+          isAdmin: req.session.isAdmin
         });
       });
     });
@@ -391,7 +397,8 @@ router.get('/list/:page', checkLogin, function(req, res, next) {
           select_status: set_status,
           error: '',
           current: page,
-          pages: Math.ceil(count / perPage)
+          pages: Math.ceil(count / perPage),
+          isAdmin: req.session.isAdmin
         });
       });
     });
@@ -408,7 +415,7 @@ router.get('/delete/:id', checkLogin, async (req, res) => {
     Candidate.findByIdAndDelete(id).exec(function (err, doc_del){
       if (err) throw err;
       console.log(doc_del);
-      res.redirect('back');
+      return res.redirect('back');
     });
   }
   else{
@@ -421,11 +428,11 @@ router.get('/delete/:id', checkLogin, async (req, res) => {
         Candidate.findByIdAndDelete(id).exec(function (err, doc_del){
           if (err) throw err;
           console.log(doc_del);
-          res.redirect('back');
+          return res.redirect('back');
         });
       }
       else{
-        res.redirect('back');
+        return res.redirect('back');
       }
     });
   }
@@ -437,7 +444,13 @@ router.get('/edit/:id', checkLogin, async (req, res) => {
   const edit = Candidate.findById(id);
   edit.exec((err, data) => {
     if (err) throw err;
-    res.render('edit', { records: data, success: '', error: '' });
+    // Validating access
+    // Admin can edit anytime, others for only allowed days
+    const day_difference = Math.abs((new Date() - data.date) / MILLISEC_PER_DAY);
+    if (req.session.isAdmin || day_difference <= ALLOWED_NUMBER_OF_DAYS) {
+      return res.render('edit', { records: data, success: '', error: '' });
+    }
+    return res.send("Edit access expired");
   });
 });
 
@@ -552,7 +565,8 @@ router.post('/search', checkLogin, function(req, res, next) {
           select_status: set_status,
           error: '',
           current: 0,
-          pages: 0
+          pages: 0,
+          isAdmin: req.session.isAdmin
         });
       }
     });

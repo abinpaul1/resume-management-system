@@ -7,6 +7,10 @@ const Location = require('../models/location');
 const Client = require('../models/client');
 const { registerValidation } = require('../validation/validation');
 
+// Constants for controlling number of days
+const MILLISEC_PER_DAY = 1000 * 60 * 60 * 24;
+const ALLOWED_NUMBER_OF_DAYS = 2;
+
 function checkLogin(req, res, next) {
   if (!req.session.userId){
     return res.redirect('/');
@@ -18,6 +22,8 @@ function checkLogin(req, res, next) {
 router.post('/update', checkLogin, function (req, res) {
   Candidate.findById(req.body.candidate_id, async function(err, candidate) {
     id = req.body.candidate_id;
+    // current_record will hold the existing data. 
+    // The candidate variable is updated with the new data.
     let current_record = await Candidate.findById(id);
 
     if (err){
@@ -26,6 +32,13 @@ router.post('/update', checkLogin, function (req, res) {
         success: '',
         error: err
       });
+    }
+
+    // Validating access
+    // Only Admin can edit anytime, others for only allowed days
+    const day_difference = Math.abs((new Date() - current_record.date) / MILLISEC_PER_DAY);
+    if (!req.session.isAdmin && day_difference > ALLOWED_NUMBER_OF_DAYS) {
+      return res.send("You are not allowed to edit this record. CTF_FLAG{PleaseStop :)}")
     }
 
     // Check validation of email
